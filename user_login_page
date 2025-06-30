@@ -1,0 +1,44 @@
+package com.example; 
+import org.testng.annotations.Test;
+import org.testng.annotations.BeforeTest;
+import org.testng.annotations.AfterTest;
+import org.openqa.selenium.By;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.chrome.ChromeOptions;
+import org.testng.Assert;
+import io.github.bonigarcia.wdm.WebDriverManager;
+
+public class AppTest {
+
+    WebDriver driver;
+
+    @BeforeTest
+    public void beforeTest() {
+        WebDriverManager.chromedriver().setup();
+
+        ChromeOptions options = new ChromeOptions();
+        options.addArguments("--remote-allow-origins=*");
+
+        driver = new ChromeDriver(options);
+    }
+   @Test
+    public void loginTest() throws InterruptedException {
+       driver.get("https://practicetestautomation.com/practice-test-login/");
+      WebElement username=driver.findElement(By.id("username"));
+       username.sendKeys("student");
+       WebElement password=driver.findElement(By.id("password"));
+       password.sendKeys("Password123");
+       WebElement submit=driver.findElement(By.id("submit"));
+       submit.click();
+       Thread.sleep(3000);
+       WebElement heading=driver.findElement(By.tagName("h1"));
+       String msg=heading.getText();
+       Assert.assertTrue(msg.contains("Logged In Successfully"),"Login failed");
+    }
+    @AfterTest
+    public void afterTest() {
+        driver.quit();
+    }
+}
