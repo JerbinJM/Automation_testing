@@ -1,0 +1,48 @@
+package seleniumtest;
+
+import org.openqa.selenium.By;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.chrome.ChromeOptions;
+import org.testng.Assert;
+import org.testng.annotations.AfterTest;
+import org.testng.annotations.BeforeTest;
+import org.testng.annotations.Test;
+
+import io.github.bonigarcia.wdm.WebDriverManager;
+
+public class AppTest {
+
+    WebDriver driver;
+
+    @BeforeTest
+    public void beforeTest() {
+         WebDriverManager.chromedriver().setup();
+             ChromeOptions options = new ChromeOptions();
+        options.addArguments("--remote-allow-origins=*");
+        options.addArguments("--disable-web-security");
+        options.addArguments("--disable-dev-shm-usage");
+        options.addArguments("--no-sandbox");
+
+        
+        driver = new ChromeDriver(options);
+    }
+
+    @Test
+    public void testcase_1() throws InterruptedException{
+      driver.navigate().to("https://www.google.com/");
+      Thread.sleep(4000);
+
+      WebElement searchbox=driver.findElement(By.name("q"));
+
+      Assert.assertFalse(searchbox.isDisplayed(),"Search box should not be displayed");
+
+      System.out.println("Search box is not visible on Google chrome");
+
+    }
+    @AfterTest
+    public void afterTest() {
+        driver.quit();
+    }
+}
